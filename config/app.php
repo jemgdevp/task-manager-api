@@ -54,6 +54,10 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'frontend_url' => env('FRONTEND_URL', env('VITE_FRONTEND_URL')),
+
+    'frontend_verify_email_url' => env('FRONTEND_VERIFY_EMAIL_URL', env('FRONTEND_URL', env('VITE_FRONTEND_URL'))),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
