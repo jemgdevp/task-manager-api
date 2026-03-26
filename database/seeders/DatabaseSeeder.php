@@ -2,24 +2,34 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // List of seeders to run
+        $seeders = [
+            InitialUserSeeder::class,
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($seeders as $seeder) {
+            if (class_exists($seeder)) {
+                $this->call($seeder);
+                // Log success message for each seeder
+                Log::info("DatabaseSeeder: seeder {$seeder} executed successfully.");
+                $this->command->info("DatabaseSeeder: seeder {$seeder} executed successfully.");
+            } else {
+                // Log error message if seeder class does not works
+                Log::error("DatabaseSeeder: seeder {$seeder} does not works.");
+                $this->command->error("DatabaseSeeder: seeder {$seeder} does not works.");
+            }
+        }
     }
 }
