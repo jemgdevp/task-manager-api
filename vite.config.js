@@ -12,7 +12,13 @@ export default defineConfig({
     ],
     server: {
         watch: {
-            ignored: ['**/storage/framework/views/**'],
+            ignored: [
+                '**/vendor/**',
+                '**/node_modules/**',
+                '**/storage/framework/**',
+                '**/storage/logs/**',
+                '**/bootstrap/cache/**',
+            ],
         },
     },
 });
