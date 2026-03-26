@@ -123,11 +123,4 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-    /**
-     * Providers
-     */
-    'providers' => [
-        Resend\Laravel\ResendServiceProvider::class,
-    ],
-
 ];
