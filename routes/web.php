@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 // Redirect Web Page
 Route::get('/', function () {
-    $frontendUrl = env('VITE_FRONTEND_URL');
+    $frontendUrl = config('app.frontend_url');
     if (!$frontendUrl) {
         abort(500, 'Frontend URL is not configured.');
     }
