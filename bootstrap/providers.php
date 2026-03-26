@@ -1,9 +1,7 @@
 <?php
 
-use App\Providers\AppServiceProvider;
-use Resend\Laravel\ResendServiceProvider;
-
 return [
-    AppServiceProvider::class,
-    ResendServiceProvider::class,
+    App\Providers\AppServiceProvider::class,
+    App\Providers\FortifyServiceProvider::class,
+    Resend\Laravel\ResendServiceProvider::class,
 ];
