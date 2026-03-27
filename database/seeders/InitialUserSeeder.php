@@ -16,8 +16,8 @@ class InitialUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $fullName = 'Juan Esteban Manrique Giraldo';
-        $email = 'murksopps@gmail.com';
+        $fullName = 'Admin';
+        $email = 'admin@taskmanager.jemg.dev';
         $password = 'password';
 
         try{
