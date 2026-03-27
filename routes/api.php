@@ -19,7 +19,6 @@ use App\Http\Controllers\Api\Public\StatusController;
  */
 Route::get('/status', [StatusController::class, 'index'])->name('status');
 
-
 /**
  * API Routes Authentication & Registration
  */
@@ -47,6 +46,7 @@ Route::post('/email/verification-notification', function (Request $request) {
         'message' => 'Verification link sent.',
     ]);
 })->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
+
 Route::get('/email/verify/{id}/{hash}', function (Request $request, string $id, string $hash) {
     $user = User::findOrFail($id);
 

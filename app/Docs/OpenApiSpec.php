@@ -15,7 +15,7 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\SecurityScheme(
     securityScheme: 'bearerAuth',
-    type: 'http',
+    type: 'https',
     scheme: 'bearer',
     bearerFormat: 'Token',
 )]
