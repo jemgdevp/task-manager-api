@@ -31,6 +31,9 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
+# Ejecutar L5Swagger para generar documentación
+php artisan l5-swagger:generate
+
 # Ejecutar migraciones (manual)
 #php artisan migrate --seed --force
 
