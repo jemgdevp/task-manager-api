@@ -12,7 +12,8 @@ return Application::configure(basePath: dirname(__DIR__))
         channels: __DIR__.'/../routes/channels.php',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Trust reverse proxies so Laravel can detect HTTPS behind load balancers / ingress.
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
