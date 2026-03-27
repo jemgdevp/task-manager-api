@@ -4,8 +4,15 @@
     "type": "module",
     "name": "task-manager-api",
     "description": "API for managing tasks, built with Laravel 12 and Vite.",
-    "homepage": "https://taskmanager.jemg.dev",
+    "homepage": "https://taskmanager.jemg.dev/documentation",
+    "author": "<jemgdevp> Juan Esteban Manrique <murksopps@gmail.com>",
+    "license": "MIT",
     "version": "0.0.1",
+    "keywords": [
+        "vue",
+        "vite",
+        "task manager"
+    ],
     "scripts": {
         "build": "vite build",
         "dev": "vite"
@@ -22,6 +29,7 @@
     },
     "engines": {
         "node": ">= 22",
-        "npm": ">= 10"
+        "npm": ">= 10",
+        "pnpm": ">= 10"
     }
 }
