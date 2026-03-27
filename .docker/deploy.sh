@@ -31,7 +31,7 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Ejecutar migraciones (opcional - comentar si se hace manualmente)
-# php artisan migrate --force
+# Ejecutar migraciones
+php artisan migrate --seed --force
 
 echo "Deploy completed successfully"
