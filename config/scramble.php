@@ -24,7 +24,9 @@ return [
         'layout' => 'responsive',
     ],
 
-    'servers' => null,
+    'servers' => [
+        'Production' => rtrim((string) env('APP_URL', 'http://localhost'), '/').'/api',
+    ],
 
     'enum_cases_description_strategy' => 'description',
 
