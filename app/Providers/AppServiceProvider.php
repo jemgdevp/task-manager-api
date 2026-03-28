@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Dedoc\Scramble\Scramble;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Routing\Route as IlluminateRoute;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +24,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Scramble::routes(static function (IlluminateRoute $route): bool {
+            $uri = ltrim($route->uri, '/');
+
+            return str_starts_with($uri, 'api/')
+                && ! in_array($uri, ['api/documentation', 'api/oauth2-callback'], true);
+        });
+
         if ($this->app->environment('production') && str_starts_with((string) config('app.url'), 'https://')) {
             URL::forceScheme('https');
         }

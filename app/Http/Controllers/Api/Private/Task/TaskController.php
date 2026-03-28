@@ -11,14 +11,24 @@ use App\Http\Requests\UpdateTaskRequest;
 use App\Jobs\SendEmailNotificationCreateTask;
 use App\Jobs\SendEmailNotificationTaskDone;
 use App\Models\Task;
+use Dedoc\Scramble\Attributes\Endpoint;
+use Dedoc\Scramble\Attributes\Group;
+use Dedoc\Scramble\Attributes\PathParameter;
+use Dedoc\Scramble\Attributes\QueryParameter;
+use Dedoc\Scramble\Attributes\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
+#[Group(name: 'Tasks', description: 'Task management endpoints', weight: 30)]
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    #[Endpoint(operationId: 'listTasks', title: 'Obtiene la lista de tareas del usuario autenticado')]
+    #[QueryParameter('page', description: 'Número de página para la paginación', type: 'int', required: false, example: 1)]
+    #[Response(status: 200, description: 'Lista paginada de tareas')]
+    #[Response(status: 401, description: 'No autenticado', type: 'array{message: string}')]
     public function index(Request $request): JsonResponse
     {
         $tasks = $request->user()
@@ -30,6 +40,10 @@ class TaskController extends Controller
         return response()->json($tasks);
     }
 
+    #[Endpoint(operationId: 'createTask', title: 'Crea una nueva tarea')]
+    #[Response(status: 201, description: 'Tarea creada exitosamente', type: 'array{message: string, data: App\\Models\\Task}')]
+    #[Response(status: 401, description: 'No autenticado', type: 'array{message: string}')]
+    #[Response(status: 422, description: 'Error de validación', type: 'array{message: string, errors: array<string, array<int, string>>}')]
     public function store(StoreTaskRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -56,6 +70,12 @@ class TaskController extends Controller
         ], 201);
     }
 
+    #[Endpoint(operationId: 'showTask', title: 'Obtiene el detalle de una tarea')]
+    #[PathParameter('task', description: 'ID de la tarea', type: 'int', example: 1)]
+    #[Response(status: 200, description: 'Detalle de la tarea', type: 'array{data: App\\Models\\Task}')]
+    #[Response(status: 401, description: 'No autenticado', type: 'array{message: string}')]
+    #[Response(status: 403, description: 'Sin permisos para acceder a la tarea', type: 'array{message: string}')]
+    #[Response(status: 404, description: 'Tarea no encontrada', type: 'array{message: string}')]
     public function show(Request $request, Task $task): JsonResponse
     {
         $this->ensureTaskOwnership($request, $task);
@@ -65,7 +85,52 @@ class TaskController extends Controller
         ]);
     }
 
+    #[Endpoint(operationId: 'updateTask', title: 'Actualiza completamente una tarea')]
+    #[PathParameter('task', description: 'ID de la tarea', type: 'int', example: 1)]
+    #[Response(status: 200, description: 'Tarea actualizada exitosamente', type: 'array{message: string, data: App\\Models\\Task}')]
+    #[Response(status: 401, description: 'No autenticado', type: 'array{message: string}')]
+    #[Response(status: 403, description: 'Sin permisos para actualizar la tarea', type: 'array{message: string}')]
+    #[Response(status: 404, description: 'Tarea no encontrada', type: 'array{message: string}')]
+    #[Response(status: 422, description: 'Error de validación', type: 'array{message: string, errors: array<string, array<int, string>>}')]
     public function update(UpdateTaskRequest $request, Task $task): JsonResponse
+    {
+        return $this->performUpdate($request, $task);
+    }
+
+    #[Endpoint(operationId: 'partialUpdateTask', title: 'Actualiza parcialmente una tarea', method: 'PATCH')]
+    #[PathParameter('task', description: 'ID de la tarea', type: 'int', example: 1)]
+    #[Response(status: 200, description: 'Tarea actualizada exitosamente', type: 'array{message: string, data: App\\Models\\Task}')]
+    #[Response(status: 401, description: 'No autenticado', type: 'array{message: string}')]
+    #[Response(status: 403, description: 'Sin permisos para actualizar la tarea', type: 'array{message: string}')]
+    #[Response(status: 404, description: 'Tarea no encontrada', type: 'array{message: string}')]
+    #[Response(status: 422, description: 'Error de validación', type: 'array{message: string, errors: array<string, array<int, string>>}')]
+    public function partialUpdate(UpdateTaskRequest $request, Task $task): JsonResponse
+    {
+        return $this->performUpdate($request, $task);
+    }
+
+    #[Endpoint(operationId: 'deleteTask', title: 'Elimina una tarea')]
+    #[PathParameter('task', description: 'ID de la tarea', type: 'int', example: 1)]
+    #[Response(status: 200, description: 'Tarea eliminada exitosamente', type: 'array{message: string}')]
+    #[Response(status: 401, description: 'No autenticado', type: 'array{message: string}')]
+    #[Response(status: 403, description: 'Sin permisos para eliminar la tarea', type: 'array{message: string}')]
+    #[Response(status: 404, description: 'Tarea no encontrada', type: 'array{message: string}')]
+    public function destroy(Request $request, Task $task): JsonResponse
+    {
+        $this->ensureTaskOwnership($request, $task);
+
+        $taskId = $task->id;
+        $userId = $task->user_id;
+
+        $task->delete();
+        event(new TaskDeletedBroadcast($taskId, $userId));
+
+        return response()->json([
+            'message' => 'Task deleted successfully',
+        ]);
+    }
+
+    private function performUpdate(UpdateTaskRequest $request, Task $task): JsonResponse
     {
         $this->ensureTaskOwnership($request, $task);
 
@@ -75,7 +140,7 @@ class TaskController extends Controller
 
         unset($data['tags']);
 
-        if (!empty($data)) {
+        if (! empty($data)) {
             $task->update($data);
         }
 
@@ -92,21 +157,6 @@ class TaskController extends Controller
         return response()->json([
             'message' => 'Task updated successfully',
             'data' => $task->fresh()->load('tags'),
-        ]);
-    }
-
-    public function destroy(Request $request, Task $task): JsonResponse
-    {
-        $this->ensureTaskOwnership($request, $task);
-
-        $taskId = $task->id;
-        $userId = $task->user_id;
-
-        $task->delete();
-        event(new TaskDeletedBroadcast($taskId, $userId));
-
-        return response()->json([
-            'message' => 'Task deleted successfully',
         ]);
     }
 

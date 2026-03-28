@@ -31,8 +31,12 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
-# Ejecutar L5Swagger para generar documentación
-php artisan l5-swagger:generate
+# Ejecutar storage:link para crear enlaces simbólicos a storage (local)(S3 Primoridla)
+php artisan storage:link
+
+# Validar y exportar documentación OpenAPI con Scramble
+php artisan scramble:analyze
+php artisan scramble:export --path=storage/api-docs/api-docs.json
 
 # Ejecutar migraciones (manual)
 #php artisan migrate --seed --force

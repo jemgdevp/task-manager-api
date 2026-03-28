@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::redirect('/docs', '/docs/api');
+
 // Redirect Web Page
 Route::get('/', function () {
     $frontendUrl = config('app.frontend_url');
