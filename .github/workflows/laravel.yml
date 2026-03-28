@@ -69,6 +69,9 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
+      - name: Generate symlic links
+        run: php artisan storage:link 
+
       - name: Run migrations
         run: php artisan migrate --force
 
