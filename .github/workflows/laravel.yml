@@ -1,9 +1,9 @@
-name: Laravel CI
+name: TaskManager API Laravel CI
 
 on:
   push:
     branches:
-      - main
+      - stable
   pull_request:
 
 concurrency:
@@ -33,7 +33,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.4'
+          php-version: "8.4"
           tools: composer:v2
           extensions: mbstring, pdo_sqlite, sqlite3, fileinfo
           coverage: none
@@ -46,7 +46,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
           cache: pnpm
 
       - name: Prepare environment file
