@@ -18,7 +18,7 @@ class InitialUserSeeder extends Seeder
     {
         $fullName = 'Admin';
         $email = 'admin@taskmanager.jemg.dev';
-        $password = 'password';
+        $password = null;
 
         try{
             User::updateOrCreate([

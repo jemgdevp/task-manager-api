@@ -31,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configure Scramble API documentation generation and access control
         Scramble::routes(static function (IlluminateRoute $route): bool {
             $uri = ltrim($route->uri, '/');
 
@@ -87,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        // Customize the email verification notification to use a custom view
         VerifyEmail::toMailUsing(function (object $notifiable, string $url): MailMessage {
             return (new MailMessage)
                 ->subject('Verify your email address')

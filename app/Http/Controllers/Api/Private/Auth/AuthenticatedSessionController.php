@@ -26,6 +26,7 @@ class AuthenticatedSessionController extends Controller
     )]
     #[Response(status: 401, description: 'Credenciales inválidas', type: 'array{message: string}')]
     #[Response(status: 422, description: 'Error de validación', type: 'array{message: string, errors: array<string, array<int, string>>}')]
+    
     public function store(LoginRequest $request): JsonResponse
     {
         $validated = $request->validated();
