@@ -12,6 +12,7 @@ use Dedoc\Scramble\Support\RouteInfo;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Routing\Route as IlluminateRoute;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -57,6 +58,29 @@ class AppServiceProvider extends ServiceProvider
                     ->as('bearerAuth')
                     ->setDescription('Use Authorization header with: Bearer <token>')
             );
+        });
+
+        Gate::define('viewApiDocs', static function ($user = null): bool {
+            $isPublic = filter_var((string) config('scramble.access.public', false), FILTER_VALIDATE_BOOL);
+
+            if ($isPublic) {
+                return true;
+            }
+
+            if (! is_object($user) || ! isset($user->email)) {
+                return false;
+            }
+
+            $allowedEmails = array_values(array_filter(array_map(
+                static fn (string $email): string => strtolower(trim($email)),
+                explode(',', (string) config('scramble.access.allowed_emails', '')),
+            )));
+
+            if ($allowedEmails === []) {
+                return false;
+            }
+
+            return in_array(strtolower((string) $user->email), $allowedEmails, true);
         });
 
         if ($this->app->environment('production') && str_starts_with((string) config('app.url'), 'https://')) {

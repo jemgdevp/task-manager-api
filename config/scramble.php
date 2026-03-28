@@ -32,6 +32,11 @@ return [
 
     'flatten_deep_query_parameters' => true,
 
+    'access' => [
+        'public' => env('SCRAMBLE_PUBLIC_DOCS', false),
+        'allowed_emails' => env('SCRAMBLE_ALLOWED_EMAILS', ''),
+    ],
+
     'middleware' => [
         'web',
         RestrictedDocsAccess::class,

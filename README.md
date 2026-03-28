@@ -12,6 +12,11 @@ This is a simple Task Manager API built with Laravel 12. It provides endpoints f
 - Analyze docs generation: `php artisan scramble:analyze`
 - Export JSON spec: `php artisan scramble:export --path=storage/api-docs/api-docs.json`
 
+### Docs access in production
+
+- `SCRAMBLE_PUBLIC_DOCS=true` to allow public access to `/docs/api`.
+- `SCRAMBLE_PUBLIC_DOCS=false` and `SCRAMBLE_ALLOWED_EMAILS=user@domain.com,admin@domain.com` to restrict access by authenticated user email.
+
 
 ## License
 
