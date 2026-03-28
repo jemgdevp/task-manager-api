@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Laravel\Sanctum\PersonalAccessToken;
 
+// Define broadcast channels for private and presence channels
 $resolveAuthorizedUserId = static function ($authenticatedUser): ?int {
     $bearerToken = request()->bearerToken();
 

@@ -1,6 +1,6 @@
 ## Production Dockerfile for Laravel API with nginx + php-fpm + supervisor
-
-FROM composer:2.8 AS composer-stage
+# Composer stage for installing PHP dependencies
+FROM composer:2.9 AS composer-stage
 
 WORKDIR /app
 
@@ -12,12 +12,13 @@ COPY composer.json composer.lock* /app/
 RUN composer install --no-interaction --optimize-autoloader --no-dev --prefer-dist --no-scripts
 
 
-## node:latest Version (node-stage)
+## Node stage for building frontend assets with Vite
 FROM node:latest AS node-stage
 
 ## Define working directory
 WORKDIR /app
 
+# Copy package.json and pnpm-lock.yaml to the node stage (needed for installing dependencies)
 COPY package.json pnpm-lock.yaml ./
 
 ## Set up npm (latest version to ensure compatibility with pnpm)
@@ -30,11 +31,12 @@ RUN npm install -g pnpm
 ## Install dependencies
 RUN pnpm install
 
+# Copy the rest of the application source code to the node stage (needed for build scripts and assets)
 COPY ./ .
 
 RUN pnpm run build
 
-
+# Production stage with nginx + php-fpm + supervisor
 FROM php:8.4-fpm-bookworm AS production-stage
 
 ENV APP_ENV=production \
@@ -78,6 +80,7 @@ RUN mkdir -p /assets/scripts /etc/supervisor/conf.d /var/log/nginx /var/log/supe
     && chown -R www-data:www-data /app \
     && chmod -R 775 /app/storage /app/bootstrap/cache
 
-EXPOSE 80
+# Expose port 80 for nginx and 8080 for Reverb
+EXPOSE 80 8080
 
 CMD ["/assets/start.sh"]
