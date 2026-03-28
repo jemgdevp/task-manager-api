@@ -69,8 +69,8 @@ jobs:
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Generate symlic links
-        run: php artisan storage:link 
+      - name: Generate symbolic links
+        run: php artisan storage:link
 
       - name: Run migrations
         run: php artisan migrate --force
@@ -78,6 +78,8 @@ jobs:
       - name: Analyze OpenAPI generation
         run: php artisan scramble:analyze
 
+      - name: Generate OpenAPI document
+        run: php artisan scramble:generate
       - name: Export OpenAPI document
         run: php artisan scramble:export --path=storage/api-docs/api-docs.json
 
