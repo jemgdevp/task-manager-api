@@ -4,7 +4,7 @@
     "type": "module",
     "name": "task-manager-api",
     "description": "API for managing tasks, built with Laravel 12 and Vite.",
-    "homepage": "https://taskmanager.jemg.dev/documentation",
+    "homepage": "https://api.taskmanager.jemg.dev/docs",
     "author": "<jemgdevp> Juan Esteban Manrique <murksopps@gmail.com>",
     "license": "MIT",
     "version": "0.0.1",

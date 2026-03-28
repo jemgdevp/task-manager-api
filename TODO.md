@@ -7,3 +7,6 @@
 
 ## 26mar2026 1640hrs
 - [x] Add OpenAPI documentation using swagger-php
+
+## 27mar2026 2346hrs
+- [ ] Improve code quality by refactoring and optimizing existing codebase
