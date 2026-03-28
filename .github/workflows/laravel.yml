@@ -78,10 +78,10 @@ jobs:
       - name: Analyze OpenAPI generation
         run: php artisan scramble:analyze
 
-      - name: Generate OpenAPI document
-        run: php artisan scramble:generate
       - name: Export OpenAPI document
-        run: php artisan scramble:export --path=storage/api-docs/api-docs.json
+        run: |
+          mkdir -p storage/api-docs
+          php artisan scramble:export --path=storage/api-docs/api-docs.json
 
       - name: Run test suite
         run: composer test
