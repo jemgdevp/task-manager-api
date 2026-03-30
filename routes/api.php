@@ -1,5 +1,6 @@
 <?php
 
+// Laravel Routing
 use Illuminate\Support\Facades\Route;
 
 // Private API Routes
@@ -15,7 +16,9 @@ use App\Http\Controllers\Api\Public\StatusController;
 /**
  * Status Route
  */
-Route::get("/status", [StatusController::class, "index"])->name("status");
+Route::controller(StatusController::class)->group(function () {
+    Route::get("/status", "index")->name("status");
+});
 
 // Redirects for API Documentation (Assuming you have a documentation generator set up)
 Route::redirect("/documentation", "/docs/api")->name("documentation.ui");
@@ -58,12 +61,11 @@ Route::post("/broadcasting/auth", BroadcastAuthController::class)->middleware(
 );
 
 /**
- * Protected API Routes (Require Authentication)
+ * Protected API Routes (Require Authentication)(Sanctum Middleware)
  */
 Route::middleware("auth:sanctum")->group(function () {
-    Route::prefix("tasks")
-        ->name("tasks.")
-        ->group(function () {
+    Route::prefix("tasks") ->name("tasks.") ->group(function () {
+
             Route::get("/", [TaskController::class, "index"])->name("index");
             Route::post("/", [TaskController::class, "store"])->name("store");
             Route::get("/{task}", [TaskController::class, "show"])->name(

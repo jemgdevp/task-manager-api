@@ -47,9 +47,9 @@
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
-            "@php artisan migrate --force",
+            "@php artisan migrate:fresh --force --seed",
             "pnpm install",
-            "pnpm run build"
+            "pnpm build"
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
@@ -61,6 +61,12 @@
         ],
         "test": [
             "@php artisan config:clear --ansi",
+            "@php artisan cache:clear --ansi",
+            "@php artisan route:clear --ansi",
+            "@php artisan view:clear --ansi",
+            "@php artisan clear-compiled --ansi",
+            "@php artisan optimize:clear --ansi",
+            "@php artisan optimize --ansi",
             "@php artisan test"
         ],
         "post-autoload-dump": [

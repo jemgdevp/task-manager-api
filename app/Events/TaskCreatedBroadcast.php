@@ -2,7 +2,10 @@
 
 namespace App\Events;
 
+// Models
 use App\Models\Task;
+
+// Laravel Basic
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
@@ -11,6 +14,7 @@ use Illuminate\Queue\SerializesModels;
 
 class TaskCreatedBroadcast implements ShouldBroadcastNow
 {
+    // Laravel Basic
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
@@ -18,6 +22,7 @@ class TaskCreatedBroadcast implements ShouldBroadcastNow
      */
     public function __construct(public Task $task)
     {
+        // I dont need this , on this case
     }
 
     /**
@@ -28,6 +33,7 @@ class TaskCreatedBroadcast implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
+            // new PrivateChannel('channel-name'),
             new PrivateChannel('App.Models.User.' . $this->task->user_id),
             new PrivateChannel('user.' . $this->task->user_id . '.tasks'),
         ];

@@ -2,7 +2,10 @@
 
 namespace App\Mail;
 
+// Models
 use App\Models\Task;
+
+// Laravel Basic
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;

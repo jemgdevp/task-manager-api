@@ -2,20 +2,33 @@
 
 namespace App\Http\Controllers\Api\Private\Task;
 
+// Events Reverb
 use App\Events\TaskCreatedBroadcast;
 use App\Events\TaskDeletedBroadcast;
 use App\Events\TaskUpdatedBroadcast;
+
+// Laravel Basic
 use App\Http\Controllers\Controller;
+
+// Laravel Form Request
 use App\Http\Requests\Task\StoreTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
+
+// Jobs
 use App\Jobs\SendEmailNotificationCreateTask;
 use App\Jobs\SendEmailNotificationTaskDone;
+
+// Models
 use App\Models\Task;
+
+// Scramble API
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\PathParameter;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Dedoc\Scramble\Attributes\Response;
+
+// Laravel Request and JsonResponse
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

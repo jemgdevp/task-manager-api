@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Redirect Docs
 Route::redirect('/docs', '/docs/api');
 
 // Redirect Web Page
