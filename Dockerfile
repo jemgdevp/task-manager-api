@@ -18,8 +18,9 @@ FROM node:latest AS node-stage
 ## Define working directory
 WORKDIR /app
 
-# Copy package.json and pnpm-lock.yaml to the node stage (needed for installing dependencies)
-COPY package.json pnpm-lock.yaml ./
+# Copy package metadata and pnpm workspace config before installing dependencies.
+# pnpm-workspace.yaml contains allowBuilds (esbuild) required in CI/container builds.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 ## Set up npm (latest version to ensure compatibility with pnpm)
 RUN npm install -g npm@latest
