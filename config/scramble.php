@@ -16,7 +16,7 @@ return [
 
     'ui' => [
         'title' => 'Task Manager API Docs',
-        'theme' => 'light',
+        'theme' => env('SCRAMBLE_THEME', 'light'),
         'hide_try_it' => false,
         'hide_schemas' => false,
         'logo' => '',
